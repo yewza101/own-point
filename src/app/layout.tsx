@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Noto_Sans_Thai } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin", "thai"] });
+const notoSansThai = Noto_Sans_Thai({ subsets: ["latin", "thai"] });
 
 export const metadata: Metadata = {
   title: "OWN-POINT",
@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="th">
-      <body className={`${inter.className} bg-pink-50 text-gray-800 min-h-screen`}>
+      <body className={`${notoSansThai.className} bg-pink-50 text-gray-800 min-h-screen`}>
         {/* Navigation Bar */}
         <nav className="bg-pink-500 text-white shadow-md">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -43,14 +43,20 @@ export default async function AdminDashboard() {
               </div>
               
               <div className="flex gap-2">
-                <form action={approveRequest}>
+                <form action={async (fd) => {
+                  "use server";
+                  await approveRequest(fd);
+                }}>
                   <input type="hidden" name="requestId" value={req.id} />
                   <input type="number" name="points" defaultValue={10} className="w-20 border rounded p-2 text-center" min={1} required />
                   <button type="submit" className="ml-2 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition-colors shadow-sm">
                     อนุมัติ
                   </button>
                 </form>
-                <form action={rejectRequest}>
+                <form action={async (fd) => {
+                  "use server";
+                  await rejectRequest(fd);
+                }}>
                   <input type="hidden" name="requestId" value={req.id} />
                   <button type="submit" className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition-colors shadow-sm">
                     ปฏิเสธ
