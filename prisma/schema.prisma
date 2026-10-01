@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Teacher {
+  id                String             @id @default(uuid())
+  name              String
+  username          String             @unique
+  password          String
+  role              Role               @default(TEACHER)
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  deedRequests      DeedRequest[]
+  pointTransactions PointTransaction[]
+}
+
+model Student {
+  id                String             @id @default(uuid())
+  name              String
+  classLevel        String
+  room              String
+  currentPoints     Int                @default(0)
+  usedPoints        Int                @default(0)
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  deedRequests      DeedRequest[]
+  pointTransactions PointTransaction[]
+}
+
+model DeedRequest {
+  id            String        @id @default(uuid())
+  description   String
+  status        RequestStatus @default(PENDING)
+  pointsAwarded Int           @default(0)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  approvedAt    DateTime?
+
+  studentId     String
+  student       Student       @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  teacherId     String
+  teacher       Teacher       @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+}
+
+model PointTransaction {
+  id          String          @id @default(uuid())
+  amount      Int
+  type        TransactionType
+  description String
+  createdAt   DateTime        @default(now())
+
+  studentId   String
+  student     Student         @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  teacherId   String
+  teacher     Teacher         @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+}
+
+enum Role {
+  ADMIN
+  TEACHER
+}
+
+enum RequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum TransactionType {
+  EARNED
+  USED
+}
